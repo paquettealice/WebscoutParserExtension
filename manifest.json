@@ -6,13 +6,15 @@
   "content_scripts": [
   ],
   "background": {
-    "scripts": ["bower_components/jquery/dist/jquery.js", "bower_components/lodash/dist/lodash.js", "background.js"]
+    "scripts": ["bower_components/lodash/dist/lodash.js", "background.js"]
   },
   "web_accessible_resources": [
     "bower_components/jquery/dist/jquery.js"
   ],
   "permissions": [
     "tabs",
-    "activeTab"
+    "activeTab",
+    "http://*/*", 
+    "https://*/*"
   ]
 }
