@@ -1,1 +1,1 @@
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"D:/werk/projects/WebscoutParserExtension","disabled":false,"__vagrantfile":true}}}
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/alice/werk/projects/WebscoutParserExtension","disabled":false,"__vagrantfile":true}}}

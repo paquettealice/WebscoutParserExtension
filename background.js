@@ -11,3 +11,21 @@ function executeScripts(js_includes, tabId, callback) {
         chrome.tabs.executeScript(tabId, {file: url}, callback);
     });
 }
+
+/** Controller (might move to its own file) **/
+var supported_domains = {
+    "walmart": {},
+    "homedepot": {}
+}
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    console.log(tab);
+    console.log(tabId);
+    _.forEach(supported_domains, function(value, domain) {
+        console.log("domain: " + domain);
+        if (tab.url.indexOf(domain) > -1) {
+            console.log("found: " + domain);
+            return false;
+        }
+    })
+});
