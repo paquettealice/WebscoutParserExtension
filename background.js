@@ -12,29 +12,43 @@ function executeScripts(js_includes, tabId, callback) {
     });
 }
 
-/** Controller (might move to its own file) **/
+/** Supported domains functionality **/
 var supported_domains = {
     "walmart": {},
     "homedepot": {}
 }
+var current_domain = null;
+
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    console.log(tab);
-    console.log(tabId);
     if (tab.status == "complete") {
-        
-        // If a supported domain is found, inject controller and send message
         _.forEach(supported_domains, function(value, domain) {
             console.log("domain: " + domain);
+            
+            // Search for supported domain when tab updates
             if (tab.url.indexOf(domain) > -1) {
                 console.log("found: " + domain);
                 
-                // inject controller
-                executeScripts(["controllers/supported_domain_controller.js"], tabId, function() {
-                    // send message to controller
-                    console.log("sending message");
-                    chrome.runtime.sendMessage({supported_domain_found: true, domain: domain});
-                    return false;
+                // Inject scripts
+                var scripts = [
+                    "bower_components/lodash/dist/lodash.js",
+                    "controllers/supported_domains_controller.js",
+                    "web_drivers/base_web_driver.js",
+                    "web_drivers/" + domain + "_web_driver.js"
+                ]
+                executeScripts(scripts, tabId, function() {
+                    console.log("Scripts should have injected");
+                    // Send message to controller
+                    payload = {
+                        supported_domain_found: true,
+                        initialize_web_driver: true,
+                        domain: domain
+                    }
+                    /** sends message 3 times for some reason **/
+                    chrome.tabs.sendMessage(tabId, payload, function(response) {
+                        console.log("injectController received response: ");
+                        console.log(response);
+                    });    
                 });
             }
         })       

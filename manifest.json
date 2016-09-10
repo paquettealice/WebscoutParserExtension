@@ -3,13 +3,16 @@
   "name": "Webscout Parser",
   "description": "Parses source search results and throws data back to webscout",
   "version": "0.1",
+  "browser_action": {},
   "content_scripts": [
   ],
   "background": {
     "scripts": ["bower_components/lodash/dist/lodash.js", "background.js"]
   },
   "web_accessible_resources": [
-    "bower_components/jquery/dist/jquery.js"
+    "bower_components/jquery/dist/jquery.js",
+    "bower_components/lodash/dist/lodash.js",
+    "controllers/supported_domains_controller.js"
   ],
   "permissions": [
     "tabs",
