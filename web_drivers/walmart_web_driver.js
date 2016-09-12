@@ -2,6 +2,8 @@
  * Created by paquettepy on 2016-09-08.
  */
 
+console.log("walmart_web_driver loaded");
+
 function WalmartWebDriver() {
     this._page_types = {
         "search": "/browse/",
@@ -10,12 +12,12 @@ function WalmartWebDriver() {
 }
 WalmartWebDriver.prototype = new BaseWebDriver("walmart");
 
-/** Parser 
+/** Parser functionality
  * The parser's job is to scrape items off a page and organize it into
  * an object (ideally similar to the model used by the database).
  */
 
-/*
+/* ---parse_element
  * This function takes a page, parses it based on the page_type, then 
  * organizes it into an array of result objects, which is returned. 
  * If no page_type is provided (or is unsupported), then a default parsing

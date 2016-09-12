@@ -2,6 +2,8 @@
  * Created by paquettepy on 2016-09-08.
  */
 
+console.log("base_web_driver loaded");
+
 function BaseWebDriver(domain) {
     this._page_types = {
         // "type": {regex: "pattern"}
@@ -9,12 +11,12 @@ function BaseWebDriver(domain) {
 }
 
 
-/** ---Parser
+/** ---Parser functionality
  * The parser's job is to scrape items off a page and organize it into
  * an object (ideally similar to the model used by the database).
  */
 
-/* ---parse_page
+/* ---parse_element
  * This function takes a page, parses it based on the page_type, then 
  * organizes it into an array of result objects, which is returned. 
  * If no page_type is provided (or is unsupported), then a default parsing
@@ -27,13 +29,13 @@ function BaseWebDriver(domain) {
  * Returns:
  *  An array of result objects
  */
-BaseWebDriver.prototype.parse_page = function(page, page_type) {
+BaseWebDriver.prototype.parse_element = function(page, page_type) {
     throw new Error('Not implemented');
 };
 
 
 
-/** ---Scout
+/** ---Scout functionality
  * The scout's job is to find out the type of the current page and determine
  * if there are items available for parsing.
  */
@@ -55,7 +57,7 @@ BaseWebDriver.prototype.get_page_type = function(url) {
     }
     
     page_type = _.find(this.page_types, function(regex, page_type) {
-        return url.match(new RegEx(regex)) != null;
+        return url.match(new RegEx(regex)) !== null;
     });
     console.log("BaseWebDriver get_page_type");
     console.log(page_type);

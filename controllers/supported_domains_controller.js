@@ -2,32 +2,34 @@
  * Created by paquettepy on 2016-09-08.
  */
 
-console.log("controller injected");
+console.log("supported_domains_controller loaded");
 
-var current_domain = null;
-var web_driver = null;
+var curr_domain = null;
+var curr_web_driver = null;
 
+function sync_domain(domain) {
+    console.log("new current domain set: " + domain + " (was " + curr_domain + ")");
+    curr_domain = domain;
+}
 
 /** Listeners **/
 (function() {
     chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
         console.log("message received!");
+        console.log(message);
         
         if (message.supported_domain_found) {
             console.log("supported_domain_found message received by controller");
-            current_domain = message.domain;
+            sync_domain(message.domain);
         }
         if (message.initialize_web_driver) {
             console.log("initialize_web_driver message received by controller");
-            if (current_domain != message.domain) {
-                console.log("new current domain set: " + message.domain + " (was " + current_domain + ")");
-                current_domain = message.domain;
-            }
-            web_driver = get_web_driver(current_domain);
+            sync_domain(message.domain);
+            initialize_web_driver(curr_domain);
         }
         if (message.scout_for_items) {
             console.log("scout_for_items message received by controller");
-            if (message.page != null && web_driver != null) {
+            if (message.element !== null && web_driver !== null) {
                 // insert scouting code here
                 web_driver.scout_page();
             }
@@ -36,17 +38,22 @@ var web_driver = null;
             }
             
         }
+        if (message.start_parsing)
         sendResponse({hello: "goodbye"});
-        return true;
     });
-    
+    console.log("controller listener added");    
 })();
-console.log("listener added");
+
+
 
 
 
 /** Web driver functionality **/
-function get_web_driver(domain) {
-    console.log("get web driver for domain: " + domain);
-    return eval("new " + _.capitalize(domain) + "WebDriver()");
+function initialize_web_driver(domain) {
+    console.log("initialize_web_driver for domain: " + domain);
+    if (!domain) {
+        //throw new Error("Initializing the web driver requires a domain!");
+    }
+    web_driver = eval("new " + _.capitalize(domain) + "WebDriver()");
 }
+
