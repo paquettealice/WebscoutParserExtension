@@ -10,7 +10,7 @@
 /* Need to make this work with promises */
 function execute_scripts(tabId, scripts, callback) {
     _.forEach(scripts, function (script_path) {
-        console.log("execute script: " + script_path);
+        console.log("---execute script: " + script_path);
         chrome.tabs.executeScript(tabId, {file: script_path}, callback(script_path));
     });
 }
@@ -54,14 +54,16 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 "web_drivers/" + domain + "_web_driver.js"
             ]
             // Need to make this work with promises
+            console.log("---executing scripts");
             chrome.tabs.executeScript(tabId, {file: scripts[0]}, function() {
-                console.log("1");
+                console.log("1 - " + scripts[0]);
                 chrome.tabs.executeScript(tabId, {file: scripts[2]}, function() {
-                    console.log("2"); 
+                    console.log("2 - " + scripts[2]); 
                     chrome.tabs.executeScript(tabId, {file: scripts[3]}, function() {
-                        console.log("3");
+                        console.log("3 - " + scripts[3]);
                         chrome.tabs.executeScript(tabId, {file: scripts[1]}, function() {
-                            console.log("4 - sending message to controller: supported_domain_found");
+                            console.log("4 - " + scripts[1]);
+                            console.log("sending message to controller: supported_domain_found");
                             chrome.tabs.sendMessage(tabId, {supported_domain_found: true, domain: domain});
                         });
                     });
@@ -84,7 +86,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         // Initialize web_driver etc.
         payload = {
             initialize_web_driver: true,
-            scout_for_Items: true,
+            scout_for_items: true,
+            start_parsing: true,
             domain: domain
             
             // more stuff

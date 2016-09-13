@@ -6,8 +6,22 @@ console.log("walmart_web_driver loaded");
 
 function WalmartWebDriver() {
     this._page_types = {
-        "search": "/browse/",
-        "main": "/^https://www.walmart.com$/"  
+        "search": {
+            "regex": "\/browse\/",
+            "selectors": [
+                "div#tile-container a.js-product-title" // get href attribute
+            ]
+        },
+        "main": {
+            "regex": "^https:\/\/www\.walmart\.com$",
+            "selectors": {
+                "jquery": [
+                    "selector A"
+                ]
+            } 
+        }
+
+        
     }
 }
 WalmartWebDriver.prototype = new BaseWebDriver("walmart");
@@ -31,12 +45,5 @@ WalmartWebDriver.prototype = new BaseWebDriver("walmart");
  *  An array of result objects
  */
 WalmartWebDriver.prototype.parse_element = function(page, page_type) {
-    console.log("walmart parse_page");
-};
-WalmartWebDriver.prototype.scout_page = function(callback) {
-    var url = window.location.href;
-    
-    
-    console.log("walmart scout_page");
-    callback(results);
+    console.log("---walmart parse_page");
 };
