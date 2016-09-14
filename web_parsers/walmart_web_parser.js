@@ -2,10 +2,19 @@
  * Created by paquettepy on 2016-09-08.
  */
 
-console.log("walmart_web_driver loaded");
+console.log("walmart_web_parser loaded");
 
-function WalmartWebDriver() {
+function WalmartWebParser() {
     this._page_types = {
+        "default": {
+            "selectors": [
+                ""
+            ]
+        },
+        "product": {
+            "regex": "\/ip\/",
+            "selectors": {}
+        },
         "search": {
             "regex": "\/browse\/",
             "selectors": [
@@ -20,11 +29,9 @@ function WalmartWebDriver() {
                 ]
             } 
         }
-
-        
     }
 }
-WalmartWebDriver.prototype = new BaseWebDriver("walmart");
+WalmartWebParser.prototype = new BaseWebParser("walmart");
 
 /** Parser functionality
  * The parser's job is to scrape items off a page and organize it into
@@ -44,6 +51,6 @@ WalmartWebDriver.prototype = new BaseWebDriver("walmart");
  * Returns:
  *  An array of result objects
  */
-WalmartWebDriver.prototype.parse_element = function(page, page_type) {
+WalmartWebParser.prototype.parse_element = function(page, page_type) {
     console.log("---walmart parse_page");
 };

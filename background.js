@@ -49,9 +49,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             console.log("---injecting scripts");
             var scripts = [
                 "bower_components/lodash/dist/lodash.js",
-                "controllers/supported_domains_controller.js",
-                "web_drivers/base_web_driver.js",
-                "web_drivers/" + domain + "_web_driver.js"
+                "controllers/web_parser_controller.js",
+                "web_parsers/base_web_parser.js",
+                "web_parsers/" + domain + "_web_parser.js"
             ]
             // Need to make this work with promises
             console.log("---executing scripts");
@@ -83,9 +83,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.browserAction.onClicked.addListener(function(tab) {
     // Make sure we're still on a supported domain
     is_supported_domain(tab.url, function(domain) {
-        // Initialize web_driver etc.
+        // Initialize web_parser etc.
         payload = {
-            initialize_web_driver: true,
+            initialize_web_parser: true,
             scout_for_items: true,
             start_parsing: true,
             domain: domain
