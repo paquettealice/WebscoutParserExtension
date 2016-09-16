@@ -49,6 +49,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             console.log("---injecting scripts");
             var scripts = [
                 "bower_components/lodash/dist/lodash.js",
+                "bower_components/jquery/dist/jquery.js",
                 "controllers/web_parser_controller.js",
                 "web_parsers/base_web_parser.js",
                 "web_parsers/" + domain + "_web_parser.js"
@@ -57,14 +58,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             console.log("---executing scripts");
             chrome.tabs.executeScript(tabId, {file: scripts[0]}, function() {
                 console.log("1 - " + scripts[0]);
-                chrome.tabs.executeScript(tabId, {file: scripts[2]}, function() {
-                    console.log("2 - " + scripts[2]); 
-                    chrome.tabs.executeScript(tabId, {file: scripts[3]}, function() {
-                        console.log("3 - " + scripts[3]);
-                        chrome.tabs.executeScript(tabId, {file: scripts[1]}, function() {
-                            console.log("4 - " + scripts[1]);
-                            console.log("sending message to controller: supported_domain_found");
-                            chrome.tabs.sendMessage(tabId, {supported_domain_found: true, domain: domain});
+                chrome.tabs.executeScript(tabId, {file: scripts[1]}, function() {
+                    console.log("2 - " + scripts[1]);
+                    chrome.tabs.executeScript(tabId, {file: scripts[2]}, function() {
+                        console.log("3 - " + scripts[2]); 
+                        chrome.tabs.executeScript(tabId, {file: scripts[3]}, function() {
+                            console.log("4 - " + scripts[3]);
+                            chrome.tabs.executeScript(tabId, {file: scripts[4]}, function() {
+                                console.log("5 - " + scripts[4]);
+                                console.log("sending message to controller: supported_domain_found");
+                                chrome.tabs.sendMessage(tabId, {supported_domain_found: true, domain: domain});
+                            });
                         });
                     });
                 });
@@ -86,8 +90,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         // Initialize web_parser etc.
         payload = {
             initialize_web_parser: true,
-            scout_for_items: true,
-            start_parsing: true,
+            get_page_type: true,
+            get_products: true,
             domain: domain
             
             // more stuff
