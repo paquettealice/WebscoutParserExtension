@@ -8,6 +8,7 @@ var curr_domain;
 var curr_web_parser;
 var curr_page_type;
 var curr_products;
+var listener_added = false;
 
 function sync_domain(domain) {
     console.log("new current domain set: " + domain + " (was " + curr_domain + ")");
@@ -15,40 +16,47 @@ function sync_domain(domain) {
 }
 
 /** Listeners **/
-(function() {
-    chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
-        console.log("---message received!");
-        console.log(message);
+function controllerListener(message, sender, sendResponse) {
+    console.log("---message received!");
+    console.log(message);
+    
+    if (message.supported_domain_found) {
+        console.log("supported_domain_found message received by controller");
+        sync_domain(message.domain);
+    }
+    if (message.initialize_web_parser) {
+        console.log("initialize_web_parser message received by controller");
+        sync_domain(message.domain);
+        initialize_web_parser(curr_domain);
+    }
+    if (message.get_page_type) {
+        curr_page_type = curr_web_parser.get_page_type();
+        console.log("controller current page_type: " + curr_page_type);            
+    }
+    if (message.get_products) {
+        console.log("get_products message received by controller");
+        if (curr_web_parser !== null) {
+            var element;
+            if (message.element) { element = message.element; }
+            else { element = $("*"); }
+            curr_products = curr_web_parser.get_products(element, curr_page_type);
+        }
+        else {
+            throw new Error("web_parser not initialized");
+        }
         
-        if (message.supported_domain_found) {
-            console.log("supported_domain_found message received by controller");
-            sync_domain(message.domain);
-        }
-        if (message.initialize_web_parser) {
-            console.log("initialize_web_parser message received by controller");
-            sync_domain(message.domain);
-            initialize_web_parser(curr_domain);
-        }
-        if (message.get_page_type) {
-            curr_page_type = curr_web_parser.get_page_type();
-            console.log("controller current page_type: " + curr_page_type);            
-        }
-        if (message.get_products) {
-            console.log("get_products message received by controller");
-            if (curr_web_parser !== null) {
-                var element;
-                if (message.element) { element = message.element; }
-                else { element = $("*"); }
-                curr_products = curr_web_parser.get_products(element, curr_page_type);
-            }
-            else {
-                throw new Error("web_parser not initialized");
-            }
-            
-        }
-        sendResponse({hello: "goodbye"});
-    });
-    console.log("controller listener added");    
+    }
+    // sendResponse(controllerListener);
+}
+
+(function() {
+    //// Make sure not to duplicate listeners
+    //chrome.extension.onMessage.removeListener(controllerListener);
+    if(!listener_added) {
+        console.log("adding listener to web parser controller");
+        chrome.extension.onMessage.addListener(controllerListener);
+        listener_added = true;         
+    }
 })();
 
 

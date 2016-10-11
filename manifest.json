@@ -1,23 +1,33 @@
 {
-  "manifest_version": 2,
-  "name": "Webscout Parser",
-  "description": "Parses source search results and throws data back to webscout",
-  "version": "0.1",
-  "browser_action": {},
-  "content_scripts": [
-  ],
-  "background": {
-    "scripts": ["bower_components/lodash/dist/lodash.js", "background.js"]
-  },
-  "web_accessible_resources": [
-    "bower_components/jquery/dist/jquery.js",
-    "bower_components/lodash/dist/lodash.js",
-    "controllers/supported_domains_controller.js"
-  ],
-  "permissions": [
-    "tabs",
-    "activeTab",
-    "http://*/*", 
-    "https://*/*"
-  ]
+    "manifest_version": 2,
+    "name": "Webscout Parser",
+    "description": "Parses source search results and throws data back to webscout",
+    "version": "0.1",
+    "browser_action": {},
+    "content_scripts": [{
+        "matches": [
+            "*://*.walmart.com/*",
+            "*://*.homedepot.com/*"
+        ],
+        "js": [
+            "bower_components/lodash/dist/lodash.js",
+            "bower_components/jquery/dist/jquery.js",
+            "controllers/web_parser_controller.js",
+            "web_parsers/base_web_parser.js"
+        ]
+    }],
+    "background": {
+        "scripts": ["bower_components/lodash/dist/lodash.js", "background.js"]
+    },
+        "web_accessible_resources": [
+        "bower_components/jquery/dist/jquery.js",
+        "bower_components/lodash/dist/lodash.js",
+        "controllers/supported_domains_controller.js"
+    ],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "http://*/*", 
+        "https://*/*"
+    ]
 }

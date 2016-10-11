@@ -7,28 +7,58 @@ console.log("base_web_parser loaded");
 function BaseWebParser(domain, product_url) {
     this.domain = domain;
     this.product_url = product_url;
-    this._page_types = {};
+    this._page_types = new Map();
 
-    this.add_page_type("default", "$."); // Regex that doesn't match anything
+    //this.add_page_type("default", "$."); // Regex that doesn't match anything
+
+    var that = this;
+    this.add_page_type("default", ".*", function(element) {
+        results = [];
+        $(element).find("[href*='" + that.product_url + "']").each(function() {
+            results.push($(this).attr("href"));
+        });
+        return results;
+    });
+    console.log(this._page_types);
 
 }
 
 /** ---Page type functionality
+ * A page type is used to optimize or specify different queries for
+ * parsing/scraping links off a page.
  */
-BaseWebParser.prototype.add_page_type = function(type, regex, get_products) {
-    var that = this;
-    if (!get_products) {
-        get_products = function(element) {
-            results = [];
-            $(element).find("a[href*='" + that.product_url + "']").each(function() {
-                results.push($(this).attr("href"));
-            });
-            return results;
-        };
+
+ /* ---add_page_type
+  */
+BaseWebParser.prototype.add_page_type = function(type, regex, parse) {
+    //var that = this;
+    //if (!get_products) {
+        //get_products = function(element) {
+            //results = [];
+            //$(element).find("[href*='" + that.product_url + "']").each(function() {
+                //results.push($(this).attr("href"));
+            //});
+            //return results;
+        //};
+    //}
+
+    // Save the default page type then delete it to reinsert it later (1)
+    if(type != "default") {
+        var def = this._page_types.get("default");
+        console.log(def);
+        this._page_types.delete("default");
+        console.log(def);        
     }
-    this._page_types[type] = {
+
+    // Add the new page type
+    this._page_types.set(type, {
         "allowed_regex": regex,
-        "get_products": get_products
+        "parse": parse
+    });
+
+    // Need the default page type to always be the last entry (2)
+    if(def) {
+        this._page_types.set("default", def)        
     }
 }
 
@@ -58,12 +88,12 @@ BaseWebParser.prototype.get_products = function(element, type) {
     console.log("parse_page with type: " + type + " and element: ");
     console.log(element);
     // Get all the links from the page based on page_type
-    if (this._page_types[type]) {
-        products = this._page_types[type].get_products(element);
+    if (this._page_types.get(type)) {
+        products = this._page_types.get(type).parse(element);
     }
     // Use default page_type if no valid page_type is provided
-    else if (this._page_types["default"]) {
-        products = this._page_types["default"].get_products(element);
+    else if (this._page_types.get("default")) {
+        products = this._page_types.get("default").parse(element);
     }
     // Return undefined if no valid or default page type is found
     else {
@@ -71,8 +101,8 @@ BaseWebParser.prototype.get_products = function(element, type) {
         return;
     }
     console.log("products found: ");
-    console.log(products);
-    return products
+    console.log(_.uniq(products));
+    return _.uniq(products)
 };
 
 /* ---get_page_type
@@ -96,16 +126,23 @@ BaseWebParser.prototype.get_page_type = function(url) {
     }
     var regex;
     var page_type;
-    _.forEach(this._page_types, function(o, type) {
-        console.log("searching for page_type: " + type + " '" + o.allowed_regex + "'");
-        regex = new RegExp(o.allowed_regex);
-        console.log(regex);
-        if (regex.test(url)) {
-            console.log("page type found: " + type);
-            page_type = type;
-            return false;
-        }
-    });
+    try {
+        var BreakException = {};
+        this._page_types.forEach(function(o, type) {
+            console.log("searching for page_type: " + type + " '" + o.allowed_regex + "'");
+            regex = new RegExp(o.allowed_regex);
+            console.log(regex);
+            if (regex.test(url)) {
+                console.log("page type found: " + type);
+                page_type = type;
+                throw BreakException;
+            }
+        });        
+    }
+    catch(e) {
+        console.log("broke out of loop");
+        if(e !== BreakException) throw e;
+    }
     return page_type;
 };
 
