@@ -18,7 +18,10 @@ function execute_scripts(tabId, scripts, callback) {
 /** Supported domains functionality **/
 var supported_domains = {
     "walmart": {},
-    "homedepot": {}
+    "homedepot": {},
+    "target": {},
+    "toysrus": {},
+    "kohls": {}
 }
 var curr_url;
 var curr_domain;

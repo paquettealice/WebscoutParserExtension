@@ -14,8 +14,13 @@ function BaseWebParser(domain, product_url) {
     var that = this;
     this.add_page_type("default", ".*", function(element) {
         results = [];
-        $(element).find("[href*='" + that.product_url + "']").each(function() {
-            results.push($(this).attr("href"));
+        $(element).find("a[href]").each(function() {
+            var regex = new RegExp(product_url.replace("/", "\/"));
+            console.log($(this).attr("href"));
+            if(regex.test($(this).attr("href"))) {
+                console.log(regex);
+                results.push($(this).attr("href"));        
+            }
         });
         return results;
     });
@@ -146,3 +151,4 @@ BaseWebParser.prototype.get_page_type = function(url) {
     return page_type;
 };
 
+/** ---Utility **/

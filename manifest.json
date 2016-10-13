@@ -6,8 +6,11 @@
     "browser_action": {},
     "content_scripts": [{
         "matches": [
-            "*://*.walmart.com/*",
-            "*://*.homedepot.com/*"
+            "*://www.walmart.com/*",
+            "*://www.homedepot.com/*",
+            "*://www.target.com/*",
+            "*://www.toysrus.com/*",
+            "*://www.kohls.com/*"
         ],
         "js": [
             "bower_components/lodash/dist/lodash.js",

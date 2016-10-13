@@ -4,12 +4,6 @@
 
 console.log("walmart_web_parser loaded");
 
-//function map_text(selector) {
-    //return $(selector).map(function() {
-        //return $(this).text();
-    //});
-//}
-
 function WalmartWebParser() {
     this.add_page_type("browse", "\/browse\/", function(element) {
         var results = [];
