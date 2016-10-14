@@ -9,17 +9,11 @@ function BaseWebParser(domain, product_url) {
     this.product_url = product_url;
     this._page_types = new Map();
 
-    //this.add_page_type("default", "$."); // Regex that doesn't match anything
-
-    var that = this;
     this.add_page_type("default", ".*", function(element) {
         results = [];
-        $(element).find("a[href]").each(function() {
-            var regex = new RegExp(product_url.replace("/", "\/"));
-            console.log($(this).attr("href"));
-            if(regex.test($(this).attr("href"))) {
-                console.log(regex);
-                results.push($(this).attr("href"));        
+        $(element).find("a[href*='" + this.product_url + "']").each(function() {
+            if(product_url.test($(this).attr("href"))) {
+                results.push($(this).attr("href"));                
             }
         });
         return results;

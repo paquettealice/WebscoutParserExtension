@@ -8,7 +8,7 @@ console.log("kohls_web_parser loaded");
 function KohlsWebParser() {
     this.add_page_type("search", "\/b\/", function(element) {
         var results = [];
-        $(element).find("div.pod-inner a[data-pod-type='pr']").each(function() {
+        $(element).find("li.products_grid a").each(function() {
             results.push({
                 "name": $(this).text(),
                 "link": $(this).attr("href")
