@@ -10,7 +10,8 @@
             "*://www.homedepot.com/*",
             "*://www.target.com/*",
             "*://www.toysrus.com/*",
-            "*://www.kohls.com/*"
+            "*://www.kohls.com/*",
+            "*://www.disneystore.com/*"
         ],
         "js": [
             "bower_components/lodash/dist/lodash.js",

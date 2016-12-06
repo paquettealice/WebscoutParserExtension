@@ -21,7 +21,8 @@ var supported_domains = {
     "homedepot": {},
     "target": {},
     "toysrus": {},
-    "kohls": {}
+    "kohls": {},
+    "disneystore": {}
 }
 var curr_url;
 var curr_domain;

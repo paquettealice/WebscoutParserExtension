@@ -8,10 +8,14 @@ function BaseWebParser(domain, product_url) {
     this.domain = domain;
     this.product_url = product_url;
     this._page_types = new Map();
+    var that = this;
 
     this.add_page_type("default", ".*", function(element) {
         results = [];
-        $(element).find("a[href*='" + this.product_url + "']").each(function() {
+        console.log(that.product_url);
+        console.log($(element).find("a[href*='" + that.product_url + "']"));
+        $(element).find("a[href*='" + that.product_url + "']").each(function() {
+            console.log(this);
             if(product_url.test($(this).attr("href"))) {
                 results.push($(this).attr("href"));                
             }

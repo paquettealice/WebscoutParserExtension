@@ -1,4 +1,6 @@
 -- update documentation
 -- add other parsers
-    -- kohls content script not injecting for whatever reason
+    -- disneystore
+    -- bedbathandbeyond
+    -- 
 -- check for multiple script injections in background (browseraction clicked)
