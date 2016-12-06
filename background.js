@@ -22,7 +22,8 @@ var supported_domains = {
     "target": {},
     "toysrus": {},
     "kohls": {},
-    "disneystore": {}
+    "disneystore": {},
+    "bedbathandbeyond": {}
 }
 var curr_url;
 var curr_domain;

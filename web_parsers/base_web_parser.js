@@ -16,7 +16,7 @@ function BaseWebParser(domain, product_url) {
         console.log($(element).find("a[href*='" + that.product_url + "']"));
         $(element).find("a[href*='" + that.product_url + "']").each(function() {
             console.log(this);
-            if(product_url.test($(this).attr("href"))) {
+            if(that.product_url.test($(this).attr("href"))) {
                 results.push($(this).attr("href"));                
             }
         });

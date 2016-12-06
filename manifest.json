@@ -11,7 +11,8 @@
             "*://www.target.com/*",
             "*://www.toysrus.com/*",
             "*://www.kohls.com/*",
-            "*://www.disneystore.com/*"
+            "*://www.disneystore.com/*",
+            "*://www.bedbathandbeyond.com/*"
         ],
         "js": [
             "bower_components/lodash/dist/lodash.js",
