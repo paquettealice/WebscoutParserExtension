@@ -16,7 +16,7 @@ function BaseWebParser(domain, product_url) {
         console.log($(element).find("a[href*='" + that.product_url + "']"));
         $(element).find("a[href*='" + that.product_url + "']").each(function() {
             console.log(this);
-            if(that.product_url.test($(this).attr("href"))) {
+            if(RegExp(that.product_url).test($(this).attr("href"))) {
                 results.push($(this).attr("href"));                
             }
         });
@@ -55,7 +55,7 @@ BaseWebParser.prototype.add_page_type = function(type, regex, parse) {
 
     // Add the new page type
     this._page_types.set(type, {
-        "allowed_regex": regex,
+        "allowed_urls": regex,
         "parse": parse
     });
 
@@ -132,8 +132,8 @@ BaseWebParser.prototype.get_page_type = function(url) {
     try {
         var BreakException = {};
         this._page_types.forEach(function(o, type) {
-            console.log("searching for page_type: " + type + " '" + o.allowed_regex + "'");
-            regex = new RegExp(o.allowed_regex);
+            console.log("searching for page_type: " + type + " '" + o.allowed_urls + "'");
+            regex = new RegExp(o.allowed_urls);
             console.log(regex);
             if (regex.test(url)) {
                 console.log("page type found: " + type);
