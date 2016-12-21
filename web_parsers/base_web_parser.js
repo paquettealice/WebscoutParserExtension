@@ -4,22 +4,29 @@
 
 console.log("base_web_parser loaded");
 
-function BaseWebParser(domain, product_url) {
+function BaseWebParser(domain, url_pattern) {
     this.domain = domain;
-    this.product_url = product_url;
+    this.url_pattern = RegExp(url_pattern);
     this._page_types = new Map();
     var that = this;
 
     this.add_page_type("default", ".*", function(element) {
         results = [];
-        console.log(that.product_url);
-        console.log($(element).find("a[href*='" + that.product_url + "']"));
-        $(element).find("a[href*='" + that.product_url + "']").each(function() {
-            console.log(this);
-            if(RegExp(that.product_url).test($(this).attr("href"))) {
-                results.push($(this).attr("href"));                
+        console.log(that.url_pattern);
+        console.log($(element));
+        $(element).find("a[href]").each(function() {
+            if(that.url_pattern.test(this.getAttribute("href"))) {
+                results.push(this.getAttribute("href").replace(RegExp("#.+$"), ""));
             }
         });
+
+        
+        //.find("a[href*='" + that.url_pattern + "']").each(function() {
+            //console.log(this);
+            //if(RegExp(that.url_pattern).test($(this).attr("href"))) {
+                //results.push($(this).attr("href"));                
+            //}
+        //});
         return results;
     });
     console.log(this._page_types);
@@ -38,7 +45,7 @@ BaseWebParser.prototype.add_page_type = function(type, regex, parse) {
     //if (!get_products) {
         //get_products = function(element) {
             //results = [];
-            //$(element).find("[href*='" + that.product_url + "']").each(function() {
+            //$(element).find("[href*='" + that.url_pattern + "']").each(function() {
                 //results.push($(this).attr("href"));
             //});
             //return results;
@@ -94,14 +101,26 @@ BaseWebParser.prototype.get_products = function(element, type) {
     if (this._page_types.get(type)) {
         products = this._page_types.get(type).parse(element);
     }
-    // Use default page_type if no valid page_type is provided
-    else if (this._page_types.get("default")) {
-        products = this._page_types.get("default").parse(element);
+
+    // Check for a default page type if no valid page type is found
+    if (!products) {
+        if (this._page_types.get("default")) {
+            "no valid page type, trying DEFAULT page_type"
+            products = this._page_types.get("default").parse(element);
+        }
+        else {
+            console.log("no valid or default page_type found!");            
+        }
     }
-    // Return undefined if no valid or default page type is found
-    else {
-        console.log("no valid or default page_type found!");
-        return;
+    // Check for a default page type if no products are found with a valid page type
+    else if (products.length == 0) {
+        if (this._page_types.get("default")) {
+            console.log("zero products found, trying DEFAULT page_type");
+            products = this._page_types.get("default").parse(element);
+        }
+        else {
+            console.log("zero products found with VALID page_type but NO default page_type found!");
+        }
     }
     console.log("products found: ");
     console.log(_.uniq(products));

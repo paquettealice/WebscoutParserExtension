@@ -12,7 +12,9 @@
             "*://www.toysrus.com/*",
             "*://www.kohls.com/*",
             "*://www.disneystore.com/*",
-            "*://www.bedbathandbeyond.com/*"
+            "*://www.bedbathandbeyond.com/*",
+            "*://www.bestbuy.com/*",
+            "*://www.thinkgeek.com/*"
         ],
         "js": [
             "bower_components/lodash/dist/lodash.js",
