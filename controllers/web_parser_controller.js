@@ -38,7 +38,7 @@ function controllerListener(message, sender, sendResponse) {
         if (curr_web_parser != null) {
             var element;
             if (message.element) { element = message.element; console.log("took element from message"); }
-            else { element = $("body"); console.log("created element"); }
+            else { element = $("*"); console.log("created element"); }
             console.log($(element).find("div[class*='certona']"));
             curr_products = curr_web_parser.get_products(element, curr_page_type);
         }
